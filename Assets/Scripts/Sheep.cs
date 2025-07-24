@@ -8,6 +8,7 @@ public class Sheep : MonoBehaviour
     private GameObject _wood;
     private SpriteRenderer _spriteRenderer;
     private SpawnManager _spawnManager;
+    private AudioSource _audioSource;
 
     private bool _isSheepFree = false;
     private bool _sheepConfused = false;
@@ -24,6 +25,12 @@ public class Sheep : MonoBehaviour
         if(_spawnManager == null)
         {
             Debug.LogError("The SPAWN MANAGER is NULL");
+        }
+
+        _audioSource = GetComponent<AudioSource>();
+        if(_audioSource == null)
+        {
+            Debug.LogError("The AUDIO SOURCE is NULL");
         }
 
     }
@@ -45,6 +52,7 @@ public class Sheep : MonoBehaviour
     {
         if(other.tag == "Arrow")
         {
+            _audioSource.Play();
             _wood.SetActive(false);
             Destroy(other.gameObject);
             _sheepConfused = true;

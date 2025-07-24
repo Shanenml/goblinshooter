@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private GameObject _shields;
+    [SerializeField]
+    private AudioClip _arrowSound;
+    private AudioSource _audioSource;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameManager _gameManager;
@@ -60,6 +63,16 @@ public class Player : MonoBehaviour
         if (_animator == null)
         {
             Debug.LogError("The ANIMATOR is NULL");
+        }
+
+        _audioSource = GetComponent<AudioSource>();
+        if(_audioSource == null)
+        {
+            Debug.LogError("The AUDIO SOURCE is NULL");
+        }
+        else
+        {
+            _audioSource.clip = _arrowSound;
         }
     }
 
@@ -100,12 +113,13 @@ public class Player : MonoBehaviour
         _animator.SetTrigger("OnPlayerFire");
         if(_isTripleShotActive == true)
         {
-            Instantiate(_tripleShotPrefab, transform.position + new Vector3(-0.1f, -0.5f, 0), Quaternion.identity);
+            Instantiate(_tripleShotPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
         }
         else
         {
-            Instantiate(_arrowPrefab, transform.position + new Vector3(-0.1f, -0.7f, 0), Quaternion.identity);
+            Instantiate(_arrowPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
         }
+        _audioSource.Play();
 
     }
 
