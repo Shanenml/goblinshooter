@@ -173,3 +173,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 0
+  _collectedClip: {fileID: 8300000, guid: 5ab8fc664ca4d604f820e255005a664a, type: 3}

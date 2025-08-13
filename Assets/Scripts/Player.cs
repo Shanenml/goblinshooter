@@ -29,9 +29,11 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private GameObject _shields;
+
     [SerializeField]
     private AudioClip _arrowSound;
     private AudioSource _audioSource;
+
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameManager _gameManager;
@@ -121,6 +123,15 @@ public class Player : MonoBehaviour
         }
         _audioSource.Play();
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "EnemyArrow")
+        {
+            Damage();
+            Destroy(other.gameObject);
+        }
     }
 
     public void Damage()

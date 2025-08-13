@@ -8,6 +8,7 @@ TagManager:
   - Arrow
   - Laser
   - Powerup
+  - EnemyArrow
   layers:
   - Default
   - TransparentFX

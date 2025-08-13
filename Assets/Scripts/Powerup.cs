@@ -14,8 +14,10 @@ public class Powerup : MonoBehaviour
     //0 = Triple Shot
     //1 = Speed
     //2 = Shields
-
     private Player _player;
+
+    [SerializeField]
+    private AudioClip _collectedClip;
     void Start()
     {
         _randomStopSpot = Random.Range(-1.0f, 4.0f);
@@ -25,6 +27,7 @@ public class Powerup : MonoBehaviour
             Debug.LogError("PLAYER is NULL");
         }
         StartCoroutine(PowerUpDespawnRoutine());
+
     }
 
     void Update()
@@ -43,9 +46,11 @@ public class Powerup : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        
+        if (other.tag == "Player")
         {
-            switch(_powerupID)
+            AudioSource.PlayClipAtPoint(_collectedClip, transform.position, 1f);
+            switch (_powerupID)
             {
                 case 0:
                     _player.TripleShotActive();

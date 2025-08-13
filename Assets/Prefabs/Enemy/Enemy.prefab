@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
+  _enemyArrowPrefab: {fileID: 8646795614367299840, guid: b473db2ca8765e841bed014429609055, type: 3}
   _deathSound:
   - {fileID: 8300000, guid: 0e9131294addb0242a100d81e5ba06ed, type: 3}
   - {fileID: 8300000, guid: 558f9f56f603a954b8d45e17e89341d9, type: 3}
@@ -94,7 +95,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -26638575
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -854058295, guid: 262a95c2aee15a34880a0602692f6232, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
