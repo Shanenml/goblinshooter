@@ -26,7 +26,7 @@ public class Powerup : MonoBehaviour
         {
             Debug.LogError("PLAYER is NULL");
         }
-        StartCoroutine(PowerUpDespawnRoutine());
+        
 
     }
 
@@ -41,6 +41,7 @@ public class Powerup : MonoBehaviour
         if (transform.position.y <= _randomStopSpot)
         {
             _speed = 0f;
+            StartCoroutine(PowerUpDespawnRoutine());
         }
     }
 

@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _restartText;
     [SerializeField]
+    private Slider _sprintBoostSlider;
+    [SerializeField]
     private Image[] _livesImage;
         //0 = Heart Image 1
         //1 = Heart Image 2
@@ -29,7 +31,6 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     public void UpdateScore(int score)
@@ -70,6 +71,11 @@ public class UIManager : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void UpdateSprintSlider(float sprintvalue)
+    {
+        _sprintBoostSlider.value = sprintvalue;
     }
 
     IEnumerator GameOverTextRoutine()

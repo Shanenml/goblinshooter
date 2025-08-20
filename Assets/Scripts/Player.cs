@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1.0f;
+    [SerializeField]
+    private float _sprintBoostSpeed = 2.0f;
+    [SerializeField]
+    private float _sprintBoostValue = 1.0f;
 
     [SerializeField]
     private int _score;
@@ -94,7 +98,22 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
+
+        if(Input.GetKey(KeyCode.LeftShift) && _sprintBoostValue > 0)
+        {
+            StopCoroutine(SprintBoostRechargeRoutine());
+            transform.Translate(direction * _speed * _sprintBoostSpeed * Time.deltaTime);
+            _sprintBoostValue -= 0.01f;
+            _uiManager.UpdateSprintSlider(_sprintBoostValue);
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        { 
+            StartCoroutine(SprintBoostRechargeRoutine());
+        }
+        else
+        {
+            transform.Translate(direction * _speed * Time.deltaTime);
+        }
         
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -5.0f, 6.0f), 0);
@@ -106,6 +125,21 @@ public class Player : MonoBehaviour
         else if (transform.position.x >= 11.5f)
         {
             transform.position = new Vector3(-11.5f, transform.position.y, 0);
+        }
+    }
+
+    IEnumerator SprintBoostRechargeRoutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+        while(_sprintBoostValue < 1.0f)
+        {
+            _sprintBoostValue += 0.1f;
+            if(_sprintBoostValue >= 1.0f)
+            {
+                _sprintBoostValue = 1.0f;
+            }
+            _uiManager.UpdateSprintSlider(_sprintBoostValue);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

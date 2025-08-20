@@ -71,17 +71,19 @@ public class Enemy : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             _speed = 0;
-             _animator.SetTrigger("OnEnemyIdle");
+            _animator.SetTrigger("OnEnemyIdle");
+            _animator.SetTrigger("OnEnemyFire");
             yield return new WaitForSeconds(0.5f);
             FireArrow();
             yield return new WaitForSeconds(0.6f);
+            _animator.SetTrigger("OnEnemyRun");
             _speed = 4.0f;
         }
     }
 
     private void FireArrow()
     {
-        _animator.SetTrigger("OnEnemyFire");
+        
         Instantiate(_enemyArrowPrefab, transform.position + new Vector3(0.3f, -0.3f, 0), Quaternion.identity);
     }
 
