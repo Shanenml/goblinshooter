@@ -17,9 +17,12 @@ public class UIManager : MonoBehaviour
     private Slider _sprintBoostSlider;
     [SerializeField]
     private Image[] _livesImage;
-        //0 = Heart Image 1
-        //1 = Heart Image 2
-        //2 = Heart Image 3
+    //0 = Heart Image 1
+    //1 = Heart Image 2
+    //2 = Heart Image 3
+    [SerializeField]
+    private TMP_Text _arrowsText;
+
 
     void Start()
     {
@@ -71,6 +74,11 @@ public class UIManager : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void UpdateArrows(int arrows)
+    {
+        _arrowsText.text = "Arrows: " + arrows;
     }
 
     public void UpdateSprintSlider(float sprintvalue)

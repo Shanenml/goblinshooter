@@ -32,7 +32,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
-    private GameObject _shields;
+    private GameObject _shields1;
+    [SerializeField]
+    private GameObject _shields2;
+    [SerializeField]
+    private GameObject _shields3;
+    private int _shieldLives;
+    private int _arrowAmmo;
 
     [SerializeField]
     private AudioClip _arrowSound;
@@ -46,6 +52,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(-5, 1, 0);
+        _arrowAmmo = 15;
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if(_spawnManager == null)
@@ -151,9 +158,15 @@ public class Player : MonoBehaviour
         {
             Instantiate(_tripleShotPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
         }
-        else
+        else if(_arrowAmmo > 0)
         {
             Instantiate(_arrowPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
+            _arrowAmmo--;
+            _uiManager.UpdateArrows(_arrowAmmo);
+        }
+        else
+        {
+            s
         }
         _audioSource.Play();
 
@@ -173,8 +186,28 @@ public class Player : MonoBehaviour
 
         if(_isShieldActive == true)
         {
-            _shields.SetActive(false);
-            _isShieldActive = false;
+            switch(_shieldLives)
+            {
+                case 3:
+                    _shields3.SetActive(false);
+                    _shieldLives--;
+                    break;
+
+                case 2:
+                    _shields2.SetActive(false);
+                    _shieldLives--;
+                    break;
+
+                case 1:
+                    _shields1.SetActive(false);
+                    _shieldLives = 0;
+                    _isShieldActive = false;
+                    break;
+
+                default:
+                    break;
+            }
+            
             return;
         }
 
@@ -223,7 +256,10 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
-        _shields.SetActive(true);
+        _shields1.SetActive(true);
+        _shields2.SetActive(true);
+        _shields3.SetActive(true);
+        _shieldLives = 3;
         _isShieldActive = true;
     }
 
