@@ -166,10 +166,16 @@ public class Player : MonoBehaviour
         }
         else
         {
-            s
+            
         }
         _audioSource.Play();
 
+    }
+
+    public void CollectAmmo()
+    {
+        _arrowAmmo = 15;
+        _uiManager.UpdateArrows(_arrowAmmo);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -219,6 +225,19 @@ public class Player : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             _gameManager.GameOver();
             Destroy(this.gameObject);
+        }
+    }
+
+    public void CollectHealing()
+    {
+        if(_lives < 3)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+        }
+        else
+        {
+            return;
         }
     }
 

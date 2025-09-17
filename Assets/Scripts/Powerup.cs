@@ -14,6 +14,11 @@ public class Powerup : MonoBehaviour
     //0 = Triple Shot
     //1 = Speed
     //2 = Shields
+    //3 = Ammo
+    //4 = Health
+
+    [SerializeField]
+    private GameObject[] _healthSprite;
     private Player _player;
 
     [SerializeField]
@@ -25,6 +30,11 @@ public class Powerup : MonoBehaviour
         if(_player == null)
         {
             Debug.LogError("PLAYER is NULL");
+        }
+
+        if(_powerupID == 4)
+        {
+            _healthSprite[Random.Range(0, 3)].SetActive(true);
         }
         
 
@@ -61,6 +71,12 @@ public class Powerup : MonoBehaviour
                     break;
                 case 2:
                     _player.ShieldActive();
+                    break;
+                case 3:
+                    _player.CollectAmmo();
+                    break;
+                case 4:
+                    _player.CollectHealing();
                     break;
                 default:
                     Debug.Log("Default Powerup Value");
