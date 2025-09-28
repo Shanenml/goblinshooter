@@ -11,11 +11,12 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private int _powerupID;
     //ID for Powerups
-    //0 = Triple Shot
-    //1 = Speed
+    //0 = Ammo
+    //1 = Health
     //2 = Shields
-    //3 = Ammo
-    //4 = Health
+    //3 = Speed Boost
+    //4 = Triple Shot
+    //5 = Penetrating Arrow
 
     [SerializeField]
     private GameObject[] _healthSprite;
@@ -32,7 +33,7 @@ public class Powerup : MonoBehaviour
             Debug.LogError("PLAYER is NULL");
         }
 
-        if(_powerupID == 4)
+        if(_powerupID == 1)
         {
             _healthSprite[Random.Range(0, 3)].SetActive(true);
         }
@@ -64,19 +65,25 @@ public class Powerup : MonoBehaviour
             switch (_powerupID)
             {
                 case 0:
-                    _player.TripleShotActive();
+                    _player.CollectAmmo();
                     break;
                 case 1:
-                    _player.SpeedBoostActive();
+                    _player.CollectHealing();
                     break;
                 case 2:
                     _player.ShieldActive();
                     break;
                 case 3:
-                    _player.CollectAmmo();
+                    _player.SpeedBoostActive();
                     break;
                 case 4:
-                    _player.CollectHealing();
+                    _player.TripleShotActive();
+                    break;
+                case 5:
+                    _player.PenetratingArrowsActive();
+                    break;
+                case 6:
+                    _player.PlayerTrips();
                     break;
                 default:
                     Debug.Log("Default Powerup Value");

@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _powerupID: 4
+  _powerupID: 1
   _healthSprite:
   - {fileID: 1636840876301243435}
   - {fileID: 9205396801567564364}

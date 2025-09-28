@@ -10,6 +10,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _scoreText;
     [SerializeField]
+    private TMP_Text _waveText;
+    [SerializeField]
+    private TMP_Text _incomingWaveText;
+    [SerializeField]
     private TMP_Text _gameOverText;
     [SerializeField]
     private TMP_Text _restartText;
@@ -27,6 +31,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "Enemy's Slain: 0";
+        _waveText.text = "Wave: 1";
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
 
@@ -39,6 +44,22 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int score)
     {
         _scoreText.text = "Enemy's Slain: " + score;
+    }
+
+    public void UpdateWave(int wave, int enemies)
+    {
+        _waveText.text = "Wave: " + wave;
+        _incomingWaveText.text = "A NEW HORDE APPROACHES!\nELIMINATE " + enemies + " TO MOVE FORWARD";
+        StartCoroutine(IncomingWaveTextRoutine());
+
+    }
+
+    IEnumerator IncomingWaveTextRoutine()
+    {
+        _incomingWaveText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(4.5f);
+        _incomingWaveText.gameObject.SetActive(false);
+
     }
 
     public void UpdateLives(int lives)

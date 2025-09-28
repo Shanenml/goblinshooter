@@ -20,15 +20,13 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _lives = 3;
-    [SerializeField]
     private bool _isTripleShotActive = false;
-    [SerializeField]
     private bool _isSpeedBoostActive = false;
-    [SerializeField]
     private bool _isShieldActive = false;
+    private bool _isPenetratingArrowsActive = false;
 
     [SerializeField]
-    private GameObject _arrowPrefab;
+    private GameObject[] _arrowPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
@@ -48,6 +46,7 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private GameManager _gameManager;
     private Animator _animator;
+    private Animator _cameraAnimator;
 
     void Start()
     {
@@ -86,6 +85,12 @@ public class Player : MonoBehaviour
         else
         {
             _audioSource.clip = _arrowSound;
+        }
+
+        _cameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
+        if(_cameraAnimator == null)
+        {
+            Debug.LogError("The MAIN CAMERA is NULL");
         }
     }
 
@@ -158,15 +163,15 @@ public class Player : MonoBehaviour
         {
             Instantiate(_tripleShotPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
         }
-        else if(_arrowAmmo > 0)
+        else if(_isPenetratingArrowsActive)
         {
-            Instantiate(_arrowPrefab, transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
+            Instantiate(_arrowPrefab[1], transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
+        }
+        else if (_arrowAmmo > 0) //normal fire
+        {
+            Instantiate(_arrowPrefab[0], transform.position + new Vector3(-0.3f, -0.7f, 0), Quaternion.identity);
             _arrowAmmo--;
             _uiManager.UpdateArrows(_arrowAmmo);
-        }
-        else
-        {
-            
         }
         _audioSource.Play();
 
@@ -219,6 +224,7 @@ public class Player : MonoBehaviour
 
         _lives--;
         _uiManager.UpdateLives(_lives);
+        _cameraAnimator.SetTrigger("OnPlayerDamage");
 
         if(_lives <= 0)
         {
@@ -226,6 +232,21 @@ public class Player : MonoBehaviour
             _gameManager.GameOver();
             Destroy(this.gameObject);
         }
+    }
+
+    public void PlayerTrips()
+    {
+        _speed = 0;
+        _animator.SetTrigger("OnPlayerTrip");
+        StartCoroutine(PlayerTripsRoutine());
+    }
+
+    IEnumerator PlayerTripsRoutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+        _animator.SetTrigger("OnPlayerStand");
+        yield return new WaitForSeconds(0.6f);
+        _speed = 5.0f;
     }
 
     public void CollectHealing()
@@ -253,6 +274,21 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(5.0f);
             _isTripleShotActive = false;
+        }
+    }
+
+    public void PenetratingArrowsActive()
+    {
+        _isPenetratingArrowsActive = true;
+        StartCoroutine(PenetratingArrowsPowerDownRoutine());
+        
+    }
+    IEnumerator PenetratingArrowsPowerDownRoutine()
+    {
+        while(_isPenetratingArrowsActive == true)
+        {
+            yield return new WaitForSeconds(6.0f);
+            _isPenetratingArrowsActive = false;
         }
     }
 

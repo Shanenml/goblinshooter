@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed = 4.0f;
     private bool _isAlive;
+    private int _enemyType;
+
+    private bool _serpentineUp;
 
     [SerializeField]
     private GameObject _enemyArrowPrefab;
@@ -15,6 +18,7 @@ public class Enemy : MonoBehaviour
     private Animator _animator;
     private Player _player;
     private AudioSource _audioSource;
+    private SpawnManager _spawnManager;
 
     [SerializeField]
     private AudioClip[] _deathSound;
@@ -33,15 +37,24 @@ public class Enemy : MonoBehaviour
             Debug.LogError("The ANIMATOR is NULL");
         }
 
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The SPAWN MANAGER is NULL");
+        }
+
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource == null)
         {
             Debug.LogError("The AUDIO SOURCE is NULL");
         }
 
+        
+
         _audioSource.clip = _deathSound[Random.Range(0, 3)];
         _isAlive = true;
 
+        DetermineEnemyType();
         StartCoroutine(EnemyFireRoutine());
     }
 
@@ -51,9 +64,57 @@ public class Enemy : MonoBehaviour
         CalculateNewPosition();
     }
 
+    private void DetermineEnemyType()
+    {
+        _enemyType = Random.Range(0, 2);
+        switch(_enemyType)
+        {
+            case 0:
+                //normal enemy
+                break;
+            case 1:
+                StartCoroutine(SerpentineRoutine());
+                break;
+            default:
+                //normal enemy
+                break;
+        }
+    }
+
     void CalculateMovement()
     {
-        transform.Translate(Vector3.left * _speed * Time.deltaTime);
+        switch (_enemyType)
+        {
+            case 0: //normal enemy
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+                break;
+            case 1: //serpentine enemy
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+                if(_serpentineUp == true)
+                {
+                    transform.Translate(Vector3.up * _speed * Time.deltaTime);
+                }
+                else
+                {
+                    transform.Translate(Vector3.down * _speed * Time.deltaTime);
+                }
+                break;
+            default:
+                //normal enemy
+                break;
+        }
+        
+    }
+
+    IEnumerator SerpentineRoutine()
+    {
+        while(_isAlive == true)
+        {
+            yield return new WaitForSeconds(1.5f);
+            _serpentineUp = true;
+            yield return new WaitForSeconds(1.5f);
+            _serpentineUp = false;
+        }
     }
 
     void CalculateNewPosition()
@@ -73,11 +134,29 @@ public class Enemy : MonoBehaviour
             _speed = 0;
             _animator.SetTrigger("OnEnemyIdle");
             _animator.SetTrigger("OnEnemyFire");
+
             yield return new WaitForSeconds(0.5f);
-            FireArrow();
+            if(_isAlive == false)
+            {
+                yield break;
+            }
+            else
+            {
+                FireArrow();
+            }
+            
+
             yield return new WaitForSeconds(0.6f);
-            _animator.SetTrigger("OnEnemyRun");
-            _speed = 4.0f;
+            if(_isAlive == false)
+            {
+                yield break;
+            }
+            else
+            {
+                _animator.SetTrigger("OnEnemyRun");
+                _speed = 4.0f;
+            }
+            
         }
     }
 
@@ -89,7 +168,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && _isAlive == true)
         {
             Player player = other.transform.GetComponent<Player>();
             if (player != null)
@@ -102,24 +181,27 @@ public class Enemy : MonoBehaviour
             }
             StopCoroutine(EnemyFireRoutine());
             _player.UpdateScore();
+            _spawnManager.EnemyWaveTransitionTracker();
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
             _audioSource.Play();
+            _isAlive = false;
             Destroy(this.gameObject, 0.8f);
         }
 
 
-        if(other.tag == "Arrow")
+        if(other.tag == "Arrow" && _isAlive == true)
         {
             StopCoroutine(EnemyFireRoutine());
-            Destroy(other.gameObject);
             if(_player != null)
             {
                 _player.UpdateScore();
             }
+            _spawnManager.EnemyWaveTransitionTracker();
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
             _audioSource.Play();
+            _isAlive = false;
             Destroy(this.gameObject, 1.0f);
         }
     }

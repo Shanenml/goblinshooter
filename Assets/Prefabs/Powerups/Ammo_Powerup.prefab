@@ -290,7 +290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _powerupID: 3
+  _powerupID: 0
+  _healthSprite: []
   _collectedClip: {fileID: 8300000, guid: 2992f83d061d94446ae95d6d200bc27e, type: 3}
 --- !u!1 &8267868223054782719
 GameObject:
