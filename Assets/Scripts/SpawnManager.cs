@@ -5,7 +5,8 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _enemyPrefab;
+    private GameObject[] _enemyPrefab;
+    private int _enemyID;
     [SerializeField]
     private GameObject[] _powerups;
     [SerializeField]
@@ -53,8 +54,13 @@ public class SpawnManager : MonoBehaviour
         while(_isPlayerAlive == true)
         {
             Vector3 posToSpawn = new Vector3(11, Random.Range(-2.0f, 5.0f), 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+            _enemyID = Random.Range(0, 3);
+            Debug.Log("enemyID is " + _enemyID);
+            GameObject newEnemy = Instantiate(_enemyPrefab[_enemyID], posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
+
+            newEnemy.GetComponent<Enemy>().DetermineEnemyType(_enemyID);
+
             _enemiesSpawned++;
 
             if(_enemiesSpawned >= _waveTransitionTarget)

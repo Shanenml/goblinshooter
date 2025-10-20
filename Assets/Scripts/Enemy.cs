@@ -54,7 +54,6 @@ public class Enemy : MonoBehaviour
         _audioSource.clip = _deathSound[Random.Range(0, 3)];
         _isAlive = true;
 
-        DetermineEnemyType();
         StartCoroutine(EnemyFireRoutine());
     }
 
@@ -64,16 +63,19 @@ public class Enemy : MonoBehaviour
         CalculateNewPosition();
     }
 
-    private void DetermineEnemyType()
+    public void DetermineEnemyType(int enemyID)
     {
-        _enemyType = Random.Range(0, 2);
-        switch(_enemyType)
+        _enemyType = enemyID;
+        switch(enemyID)
         {
             case 0:
                 //normal enemy
                 break;
             case 1:
                 StartCoroutine(SerpentineRoutine());
+                break;
+            case 2:
+                //is ground and pound
                 break;
             default:
                 //normal enemy
@@ -98,6 +100,9 @@ public class Enemy : MonoBehaviour
                 {
                     transform.Translate(Vector3.down * _speed * Time.deltaTime);
                 }
+                break;
+            case 2: //ground a pound
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
                 break;
             default:
                 //normal enemy
