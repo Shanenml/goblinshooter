@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     private bool _serpentineUp;
 
     [SerializeField]
-    private GameObject _enemyArrowPrefab;
+    private GameObject _enemyAttackPrefab;
 
     private Animator _animator;
     private Player _player;
@@ -147,7 +147,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                FireArrow();
+                FireAttack();
             }
             
 
@@ -165,10 +165,25 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void FireArrow()
+    private void FireAttack()
     {
+        switch(_enemyType)
+        {
+            case 0:
+                Instantiate(_enemyAttackPrefab, transform.position + new Vector3(0.3f, -0.3f, 0), Quaternion.identity);
+                break;
+            case 1:
+                Instantiate(_enemyAttackPrefab, transform.position + new Vector3(0.3f, -0.3f, 0), Quaternion.identity);
+                break;
+            case 2:
+                Instantiate(_enemyAttackPrefab, transform.position + new Vector3(-0.9f, -0.6f, 0), Quaternion.identity);
+                break;
+            default:
+                break;
+
+        }
         
-        Instantiate(_enemyArrowPrefab, transform.position + new Vector3(0.3f, -0.3f, 0), Quaternion.identity);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)

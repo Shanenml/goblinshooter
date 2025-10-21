@@ -9,6 +9,7 @@ TagManager:
   - Laser
   - Powerup
   - EnemyArrow
+  - EnemyGroundPound
   layers:
   - Default
   - TransparentFX
